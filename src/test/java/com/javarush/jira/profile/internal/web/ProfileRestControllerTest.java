@@ -1,17 +1,12 @@
 package com.javarush.jira.profile.internal.web;
 
 import com.javarush.jira.AbstractControllerTest;
-import com.javarush.jira.profile.ProfileTo;
 import com.javarush.jira.profile.internal.ProfileRepository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.javarush.jira.common.util.JsonUtil.writeValue;
@@ -20,7 +15,6 @@ import static com.javarush.jira.login.internal.web.UserTestData.USER_MAIL;
 import static com.javarush.jira.login.internal.web.UserTestData.USER_ID;
 import static com.javarush.jira.profile.internal.web.ProfileRestController.REST_URL;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,7 +26,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     private ProfileRepository profileRepository;
 
     @Test
-    @WithUserDetails(value = "admin@gmail.com")
+    @WithUserDetails(value = USER_MAIL)
     void getProfile_Success() throws Exception {
         perform( MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
