@@ -1,6 +1,5 @@
 package com.javarush.jira.login;
 
-import com.javarush.jira.profile.internal.model.Profile;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.NonNull;
