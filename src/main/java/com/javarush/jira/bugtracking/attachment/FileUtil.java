@@ -34,15 +34,6 @@ public class FileUtil {
             throw new IllegalRequestDataException("Failed to upload file: " + multipartFile.getOriginalFilename(), ex);
         }
     }
-//        if (dir.exists() || dirPat.mkdirs()) {
-//            File file = new File(directoryPath + fileName);
-//            try (OutputStream outStream = new FileOutputStream(file)) {
-//                outStream.write(multipartFile.getBytes());
-//            } catch (IOException ex) {
-//                throw new IllegalRequestDataException("Failed to upload file" + multipartFile.getOriginalFilename());
-//            }
-//        }
-//    }
 
     public static Resource download(String fileLink) {
         Path path = Paths.get(fileLink);
