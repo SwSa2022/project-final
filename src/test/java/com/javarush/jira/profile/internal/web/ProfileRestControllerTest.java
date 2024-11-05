@@ -1,6 +1,9 @@
 package com.javarush.jira.profile.internal.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javarush.jira.AbstractControllerTest;
+import com.javarush.jira.profile.ProfileTo;
+import com.javarush.jira.profile.internal.ProfileMapper;
 import com.javarush.jira.profile.internal.ProfileRepository;
 
 import org.junit.jupiter.api.Test;
@@ -10,9 +13,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.javarush.jira.common.util.JsonUtil.writeValue;
+import static com.javarush.jira.login.internal.web.UserTestData.*;
 import static com.javarush.jira.profile.internal.web.ProfileTestData.*;
-import static com.javarush.jira.login.internal.web.UserTestData.USER_MAIL;
-import static com.javarush.jira.login.internal.web.UserTestData.USER_ID;
 import static com.javarush.jira.profile.internal.web.ProfileRestController.REST_URL;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,7 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Autowired
+    ProfileMapper profileMapper;
+
+    @Autowired
     private ProfileRepository profileRepository;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     @WithUserDetails(value = USER_MAIL)
@@ -37,7 +43,6 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
     void getProfile_Unauthorized() throws Exception {
         perform(get(REST_URL))
                 .andExpect(status().isUnauthorized());
@@ -61,21 +66,40 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void updateProfile_InvalidData() throws Exception {
-        String invalidJson = "{\"id\":null,\"mailNotifications\":[\"\"],\"contacts\":[{\"code\":\"skype\",\"value\":\"\"}]}";
+        ProfileTo invalidProfile = getInvalidTo();
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(invalidJson))
-                .andExpect(status().isUnprocessableEntity()); // 422 Unprocessable Entity
+                .content(objectMapper.writeValueAsString(invalidProfile)))
+                .andExpect(status().isUnprocessableEntity());
     }
 
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void updateProfile_HtmlUnsafeContent() throws Exception {
+        ProfileTo htmlUnsafeProfile = getWithContactHtmlUnsafeTo();
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(htmlUnsafeProfile)))
+                .andExpect(status().isUnprocessableEntity());
+    }
 
     @Test
-    @WithUserDetails(value = "admin@gmail.com")
-    void updateProfile_Forbidden() throws Exception {
+    @WithUserDetails(value = USER_MAIL)
+    void updateProfile_UnknownContact() throws Exception {
+        ProfileTo unknownContactProfile = getWithUnknownContactTo();
         perform(MockMvcRequestBuilders.put(REST_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":1,\"email\":\"user@gmail.com\",\"first_name\":\"userFirstName\",\"last_name\":\"userLastName\"}"))
-                        .andExpect(status().isForbidden());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(unknownContactProfile)))
+                .andExpect(status().isUnprocessableEntity());
+    }
 
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void updateProfile_UnknownNotification() throws Exception {
+        ProfileTo unknownNotificationProfile = getWithUnknownNotificationTo();
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(unknownNotificationProfile)))
+                .andExpect(status().isUnprocessableEntity());
     }
 }

@@ -14,7 +14,7 @@ public class ProfileTestData {
             MatcherFactory.usingIgnoringFieldsComparator(Profile.class, "user");
 
     public static MatcherFactory.Matcher<ProfileTo> PROFILE_TO_MATCHER =
-            MatcherFactory.usingIgnoringFieldsComparator(ProfileTo.class, "user");
+            MatcherFactory.usingIgnoringFieldsComparator(ProfileTo.class, "id");
 
     public static ProfileTo USER_PROFILE_TO = new ProfileTo(null,
             Set.of("assigned", "overdue", "deadline"),
