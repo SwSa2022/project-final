@@ -7,14 +7,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 @UtilityClass
 public class FileUtil {
@@ -25,16 +20,29 @@ public class FileUtil {
             throw new IllegalRequestDataException("Select a file to upload.");
         }
 
-        File dir = new File(directoryPath);
-        if (dir.exists() || dir.mkdirs()) {
-            File file = new File(directoryPath + fileName);
-            try (OutputStream outStream = new FileOutputStream(file)) {
-                outStream.write(multipartFile.getBytes());
-            } catch (IOException ex) {
-                throw new IllegalRequestDataException("Failed to upload file" + multipartFile.getOriginalFilename());
-            }
+        Path dirPath = Paths.get(directoryPath);
+        try {
+            Files.createDirectories(dirPath); // Creates a path if it doesn't exist, ignoring existing ones
+        } catch (IOException ex) {
+            throw new IllegalRequestDataException("Could not create directory for upload: " + directoryPath);
+        }
+        // Write the file to the specified location
+        Path filePath = dirPath.resolve(fileName); // Creates a file path
+        try {
+            Files.write(filePath, multipartFile.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException ex) {
+            throw new IllegalRequestDataException("Failed to upload file: " + multipartFile.getOriginalFilename(), ex);
         }
     }
+//        if (dir.exists() || dirPat.mkdirs()) {
+//            File file = new File(directoryPath + fileName);
+//            try (OutputStream outStream = new FileOutputStream(file)) {
+//                outStream.write(multipartFile.getBytes());
+//            } catch (IOException ex) {
+//                throw new IllegalRequestDataException("Failed to upload file" + multipartFile.getOriginalFilename());
+//            }
+//        }
+//    }
 
     public static Resource download(String fileLink) {
         Path path = Paths.get(fileLink);
@@ -53,7 +61,7 @@ public class FileUtil {
     public static void delete(String fileLink) {
         Path path = Paths.get(fileLink);
         try {
-            Files.delete(path);
+            Files.deleteIfExists(path);// deleteIfExists doesn't throw an exception if the file is missing
         } catch (IOException ex) {
             throw new IllegalRequestDataException("File" + fileLink + " deletion failed.");
         }
