@@ -1,4 +1,4 @@
 databaseChangeLog:
   - include:
-      file: classpath:db/changelog/v.1.0.0/cumulative.yaml
+      file: "v.1.0.0/cumulative.yaml"
       relativeToChangelogFile: true

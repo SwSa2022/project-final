@@ -5,33 +5,34 @@ DROP TABLE IF EXISTS USER_ROLE;
 DROP TABLE IF EXISTS CONTACT;
 DROP TABLE IF EXISTS MAIL_CASE;
 DROP
-SEQUENCE IF EXISTS MAIL_CASE_ID_SEQ;
+    SEQUENCE IF EXISTS MAIL_CASE_ID_SEQ;
 DROP TABLE IF EXISTS PROFILE;
 DROP TABLE IF EXISTS TASK_TAG;
 DROP TABLE IF EXISTS USER_BELONG;
 DROP
-SEQUENCE IF EXISTS USER_BELONG_ID_SEQ;
+    SEQUENCE IF EXISTS USER_BELONG_ID_SEQ;
 DROP TABLE IF EXISTS ACTIVITY;
 DROP
-SEQUENCE IF EXISTS ACTIVITY_ID_SEQ;
+    SEQUENCE IF EXISTS ACTIVITY_ID_SEQ;
 DROP TABLE IF EXISTS TASK;
 DROP
-SEQUENCE IF EXISTS TASK_ID_SEQ;
+    SEQUENCE IF EXISTS TASK_ID_SEQ;
 DROP TABLE IF EXISTS SPRINT;
 DROP
-SEQUENCE IF EXISTS SPRINT_ID_SEQ;
+    SEQUENCE IF EXISTS SPRINT_ID_SEQ;
 DROP TABLE IF EXISTS PROJECT;
 DROP
-SEQUENCE IF EXISTS PROJECT_ID_SEQ;
+    SEQUENCE IF EXISTS PROJECT_ID_SEQ;
 DROP TABLE IF EXISTS REFERENCE;
 DROP
-SEQUENCE IF EXISTS REFERENCE_ID_SEQ;
+    SEQUENCE IF EXISTS REFERENCE_ID_SEQ;
 DROP TABLE IF EXISTS ATTACHMENT;
 DROP
-SEQUENCE IF EXISTS ATTACHMENT_ID_SEQ;
+    SEQUENCE IF EXISTS ATTACHMENT_ID_SEQ;
 DROP TABLE IF EXISTS USERS;
 DROP
-SEQUENCE IF EXISTS USERS_ID_SEQ;
+    SEQUENCE IF EXISTS USERS_ID_SEQ;
+
 
 create table PROJECT
 (
@@ -57,6 +58,7 @@ create table MAIL_CASE
     TEMPLATE  varchar(255) not null
 );
 
+
 create table SPRINT
 (
     ID bigserial primary key,
@@ -67,6 +69,7 @@ create table SPRINT
     PROJECT_ID  bigint        not null,
     constraint FK_SPRINT_PROJECT foreign key (PROJECT_ID) references PROJECT (ID) on delete cascade
 );
+
 
 create table REFERENCE
 (
@@ -79,6 +82,7 @@ create table REFERENCE
     AUX        varchar,
     constraint UK_REFERENCE_REF_TYPE_CODE unique (REF_TYPE, CODE)
 );
+
 
 create table USERS
 (
@@ -94,6 +98,7 @@ create table USERS
     STARTPOINT   timestamp
 );
 
+
 create table PROFILE
 (
     ID                 bigint primary key,
@@ -103,6 +108,7 @@ create table PROFILE
     constraint FK_PROFILE_USERS foreign key (ID) references USERS (ID) on delete cascade
 );
 
+
 create table CONTACT
 (
     ID    bigint       not null,
@@ -111,6 +117,7 @@ create table CONTACT
     primary key (ID, CODE),
     constraint FK_CONTACT_PROFILE foreign key (ID) references PROFILE (ID) on delete cascade
 );
+
 
 create table TASK
 (
@@ -132,6 +139,7 @@ create table TASK
     constraint FK_TASK_PARENT_TASK foreign key (PARENT_ID) references TASK (ID) on delete cascade
 );
 
+
 create table ACTIVITY
 (
     ID bigserial primary key,
@@ -150,6 +158,7 @@ create table ACTIVITY
     constraint FK_ACTIVITY_TASK foreign key (TASK_ID) references TASK (ID) on delete cascade
 );
 
+
 create table TASK_TAG
 (
     TASK_ID bigint      not null,
@@ -157,6 +166,7 @@ create table TASK_TAG
     constraint UK_TASK_TAG unique (TASK_ID, TAG),
     constraint FK_TASK_TAG foreign key (TASK_ID) references TASK (ID) on delete cascade
 );
+
 
 create table USER_BELONG
 (
@@ -172,6 +182,7 @@ create table USER_BELONG
 create unique index UK_USER_BELONG on USER_BELONG (OBJECT_ID, OBJECT_TYPE, USER_ID, USER_TYPE_CODE);
 create index IX_USER_BELONG_USER_ID on USER_BELONG (USER_ID);
 
+
 create table ATTACHMENT
 (
     ID bigserial primary key,
@@ -183,6 +194,7 @@ create table ATTACHMENT
     DATE_TIME   timestamp,
     constraint FK_ATTACHMENT foreign key (USER_ID) references USERS (ID)
 );
+
 
 create table USER_ROLE
 (

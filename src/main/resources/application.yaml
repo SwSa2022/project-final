@@ -1,20 +1,21 @@
 #  https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 app:
-  host-url: http://jira:8080
-  test-mail: jira4jr@gmail.com
+  host-url: http://localhost:8080
+  test-mail: ${MAIL_USERNAME}
   templates-update-cache: 5s
   mail-sending-props:
     core-pool-size: 8
     max-pool-size: 100
 
 spring:
+  config:
+    import: "classpath:/application-secret.yaml"
   init:
     mode: never
   jpa:
     show-sql: true
     open-in-view: false
-  config:
-    import: "classpath:/application-secret.yaml"
+
 
   # validate db by model
   hibernate:
@@ -29,12 +30,15 @@ spring:
       jdbc.batch_size: 20
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/jira
+    url: jdbc:postgresql://db:5432/jira
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+  hikari:
+    connection-timeout: 30000
+
   liquibase:
-    change-log: "classpath:db/changelog/db.changelog-master.yaml"
+    change-log: classpath:db/changelog/v.1.0.0/cumulative.yaml
     enabled: true
     drop-first: false
     default-schema: public

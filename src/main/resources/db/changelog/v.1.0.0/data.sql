@@ -24,6 +24,7 @@ values ('user@gmail.com', '{noop}password', 'userFirstName', 'userLastName', 'us
 -- 0 DEV
 -- 1 ADMIN
 -- 2 MANAGER
+
 DELETE
 FROM USER_ROLE;
 insert into USER_ROLE (USER_ID, ROLE)
@@ -56,6 +57,7 @@ values (1, 'skype', 'userSkype'),
        (2, 'github', 'adminGitHub'),
        (2, 'tg', 'adminTg'),
        (2, 'vk', 'adminVk');
+
 
 delete
 from ATTACHMENT;
@@ -108,6 +110,7 @@ values ('active', null, null, 'Sprint-2', 1),
        ('active', null, null, 'Sprint-1', 4);
 alter
 sequence SPRINT_ID_SEQ restart with 1000;
+
 
 ---- project 1 -------------
 INSERT INTO TASK (TITLE, TYPE_CODE, STATUS_CODE, PROJECT_ID, SPRINT_ID, STARTPOINT)
