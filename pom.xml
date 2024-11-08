@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.javarush</groupId>
-    <artifactId>jira</artifactId>
+    <artifactId>JiraRush</artifactId>
     <version>1.0</version>
     <name>JiraRush</name>
     <description>Mini-JIRA from JavaRush</description>
@@ -110,6 +110,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <version>4.29.2</version>
         </dependency>
 
         <dependency>

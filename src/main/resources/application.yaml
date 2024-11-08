@@ -1,6 +1,6 @@
 #  https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 app:
-  host-url: http://localhost:8080
+  host-url: http://jira:8080
   test-mail: jira4jr@gmail.com
   templates-update-cache: 5s
   mail-sending-props:
@@ -18,7 +18,7 @@ spring:
 
   # validate db by model
   hibernate:
-    ddl-auto: validate
+    ddl-auto: none
 
   properties:
     #  http://docs.jboss.org/hibernate/orm/5.3/userguide/html_single/Hibernate_User_Guide.html#configurations
@@ -29,12 +29,15 @@ spring:
       jdbc.batch_size: 20
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/jira
+    url: jdbc:postgresql://postgres:5432/jira
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
   liquibase:
-    changeLog: "classpath:db/changelog.sql"
+    change-log: "classpath:db/changelog/db.changelog-master.yaml"
+    enabled: true
+    drop-first: false
+    default-schema: public
 
   # Jackson Fields Serialization
   jackson:
@@ -100,10 +103,10 @@ spring:
 
 logging:
   level:
-    root: WARN
-    com.javarush.jira: DEBUG
-    com.javarush.jira.common.config.MvcConfig: WARN
-    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
+    root: INFO
+    com.javarush.jira: INFO
+    com.javarush.jira.common.config.MvcConfig: INFO
+    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: INFO
 
 server:
   #  https://springdoc.org/index.html#how-can-i-deploy-springdoc-openapi-ui-behind-a-reverse-proxy

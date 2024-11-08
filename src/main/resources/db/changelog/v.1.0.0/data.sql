@@ -1,5 +1,3 @@
---liquibase formatted sql
-
 -- populate users
 DELETE
 FROM USERS;

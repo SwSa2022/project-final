@@ -5,5 +5,8 @@ target
 logs
 attachments
 *.patch
+# Ignore environment files
+.env
+
 
 
