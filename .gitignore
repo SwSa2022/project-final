@@ -7,6 +7,7 @@ attachments
 *.patch
 # Ignore environment files
 .env
+pgdata
 
 
 
