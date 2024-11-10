@@ -19,11 +19,14 @@ public class ThymeleafConfig {
     // Attention: with TemplateEngine clear cache doesn't work
     public SpringTemplateEngine thymeleafTemplateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
-        FileTemplateResolver viewResolver = createTemplateResolver("file:/app/resources/view/");
+        FileTemplateResolver staticResolver = createTemplateResolver("/resources/mails/");
+        staticResolver.setOrder(1);
+        staticResolver.setCheckExistence(true);
+        FileTemplateResolver viewResolver = createTemplateResolver("/resources/view/");
         viewResolver.setCheckExistence(true);
-        viewResolver.setOrder(1);
-        FileTemplateResolver mailResolver = createTemplateResolver("file:/app/resources/mails/");
-        mailResolver.setOrder(2);
+        viewResolver.setOrder(2);
+        FileTemplateResolver mailResolver = createTemplateResolver("/resources/mails/");
+        mailResolver.setOrder(3);
         engine.setTemplateResolvers(Set.of(viewResolver, mailResolver));
         return engine;
     }
