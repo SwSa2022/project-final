@@ -13,8 +13,8 @@ CMD ["nginx", "-g", "daemon off;"]
 
 FROM openjdk:17-jdk-slim
 
-COPY target/JiraRush.jar ./JiraRush.jar
+COPY target/JiraRush-1.0.jar ./JiraRush-1.0.jar
 COPY resources ./resources
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/JiraRush.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar", "/JiraRush-1.0.jar", "--spring.profiles.active=prod"]
 

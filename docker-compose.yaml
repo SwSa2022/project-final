@@ -5,8 +5,8 @@ networks:
     driver: bridge
 
 services:
-  jira:
-    container_name: jira-web
+  jira-app:
+    container_name: jira-app
     volumes:
       - /resources/mails:/app/resources/mails
       - /resources/static:/app/resources/static
@@ -51,7 +51,7 @@ services:
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-#       POSTGRES_DB: jira
+      POSTGRES_DB: jira
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
@@ -66,6 +66,10 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx-server
+    restart: always
+    build:
+        context: .
+        dockerfile: Dockerfile
 #     volumes:
 #       - ./config/nginx.conf:/etc/nginx/nginx.conf
 #       - ./config/default.conf:/etc/nginx/conf.d/default.conf
@@ -73,6 +77,6 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - jira
+      - jira-app
     networks:
       - jira-net
